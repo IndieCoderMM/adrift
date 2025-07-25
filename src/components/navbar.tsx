@@ -1,4 +1,5 @@
 import Link from "next/link";
+import UserButton from "./user-button";
 
 const Navbar = () => {
   return (
@@ -7,6 +8,7 @@ const Navbar = () => {
         <Link href={"/"} className="text-3xl font-extrabold tracking-tight">
           Adrift.
         </Link>
+        <UserButton />
       </div>
     </div>
   );

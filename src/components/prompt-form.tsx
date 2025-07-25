@@ -1,5 +1,46 @@
+"use client";
+
+import { usePuterStore } from "@/lib/puter";
+import { generateID, getEntryKey } from "@/utils/storage";
+import { FormEventHandler } from "react";
+
 const PromptForm = () => {
   const prompt = "When did I last phone a friend?";
+  const kv = usePuterStore((s) => s.kv);
+  const ai = usePuterStore((s) => s.ai);
+
+  const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
+    e.preventDefault();
+    const form = e.currentTarget.closest("form");
+    if (!form) {
+      console.log("Form not found");
+      return;
+    }
+
+    const formData = new FormData(form);
+    const timestamp = formData.get("timestamp") as string;
+    const emotion = formData.get("emotion") as string;
+    const note = formData.get("note") as string;
+
+    const id = generateID();
+
+    const data = {
+      id,
+      label: prompt,
+      timestamp,
+      emotion,
+      note,
+    };
+
+    try {
+      await kv.set(getEntryKey(id), JSON.stringify(data));
+
+      //const feedback = await ai.feedback();
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   return (
     <div>
       <div className="mb-2 flex items-center gap-4">
@@ -11,14 +52,9 @@ const PromptForm = () => {
           Skip
         </button>
       </div>
-      <form className="flex flex-col gap-4">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <div className="flex flex-col py-1">
-          <input
-            type="datetime-local"
-            className="text-2xl"
-            name="calendar"
-            required
-          />
+          <input type="date" className="text-2xl" name="timestamp" required />
         </div>
         <div className="flex flex-col py-1">
           <label htmlFor="emotion">How did you feel at this time?</label>

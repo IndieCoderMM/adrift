@@ -31,3 +31,7 @@ body {
   color: var(--foreground);
   font-family: var(--font-main);
 }
+
+.btn {
+  @apply border-border rounded border border-b-2 p-2;
+}

@@ -1,3 +1,4 @@
+import LoginPortal from "@/components/login-portal";
 import Navbar from "@/components/navbar";
 import type { Metadata } from "next";
 import { Space_Grotesk } from "next/font/google";
@@ -21,10 +22,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${mainFont.variable} h-screen overflow-hidden antialiased`}
+        className={`${mainFont.variable} relative h-screen overflow-hidden antialiased`}
       >
         <Navbar />
         {children}
+        <LoginPortal />
+        <script src="https://js.puter.com/v2/"></script>
       </body>
     </html>
   );
