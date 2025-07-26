@@ -7,6 +7,7 @@ type TimeEntry = {
   reflection_id: string;
   note?: string;
   feedback?: AIFeedback;
+  createdAt: number;
 };
 
 type Reflection = {

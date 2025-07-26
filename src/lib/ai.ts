@@ -17,7 +17,7 @@ export const getAiPrompt = ({ entry }: { entry: Partial<TimeEntry> }) => {
   return `You are an expert in personal journaling, cognitive reflection, and life-logging systems.  
 You help users better understand their emotional patterns and experiences over time.  
 Your task is to analyze a single TimeEntry log and provide a thoughtful, structured review.
-Be direct, but constructive. You are helping someone make meaning out of their life data.
+Always be constructive and use direct conversational tone. You are helping someone make meaning out of their life data.
 Here is the log:
   Label: ${entry.label},
   Date: ${entry.timestamp},

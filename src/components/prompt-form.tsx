@@ -4,9 +4,8 @@ import { generateReflectionPrompt, getAiPrompt } from "@/lib/ai";
 import { usePuterStore } from "@/lib/puter";
 import { useAppStore } from "@/lib/store";
 import { generateID, getEntryKey, getQuestionKey } from "@/utils/storage";
-import { FormEventHandler, useState } from "react";
-
-const emotions = ["very sad", "sad", "neutral", "happy", "very happy"];
+import { FormEventHandler, useCallback, useState } from "react";
+import EmotionPicker from "./emotion-picker";
 
 type Status = "idle" | "uploading" | "processing" | "error" | "success";
 
@@ -24,6 +23,7 @@ const PromptForm = () => {
   const setOpenLogin = useAppStore((s) => s.setOpenLogin);
   const [status, setStatus] = useState<Status>("idle");
   const [generating, setGenerating] = useState(false);
+  const [emotion, setEmotion] = useState("");
 
   const handleGenerateReflection = async () => {
     if (!auth || !auth.isAuthenticated) {
@@ -50,6 +50,13 @@ const PromptForm = () => {
     }
   };
 
+  const handleEmotion = useCallback(
+    (emotion: string) => {
+      setEmotion(emotion);
+    },
+    [emotion],
+  );
+
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
     if (!auth || !auth.isAuthenticated) {
@@ -65,7 +72,6 @@ const PromptForm = () => {
 
     const formData = new FormData(form);
     const timestamp = formData.get("timestamp") as string;
-    const emotion = formData.get("emotion") as string;
     const note = formData.get("note") as string;
 
     const id = generateID();
@@ -77,7 +83,8 @@ const PromptForm = () => {
       reflection_id: reflection.id,
       label: reflection.question,
       action: reflection.action,
-      emotion: emotions[Math.max(Number(emotion), emotions.length - 1)],
+      emotion,
+      createdAt: Date.now(),
     };
 
     try {
@@ -109,7 +116,7 @@ const PromptForm = () => {
   };
 
   return (
-    <div>
+    <div className="h-full">
       <div className="mb-2 flex items-center gap-4">
         <h2 className="text-2xl capitalize">{reflection.question}</h2>
         <button
@@ -120,44 +127,46 @@ const PromptForm = () => {
         >
           {generating ? "Generating..." : "Skip"}
         </button>
+        {status !== "idle" ? (
+          <span className="ml-auto text-sm capitalize italic">{status}</span>
+        ) : null}
       </div>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+      <form
+        onSubmit={handleSubmit}
+        className="relative flex h-full flex-col gap-4 overflow-y-auto"
+      >
         <div className="flex flex-col py-1">
-          <input type="date" className="text-2xl" name="timestamp" required />
-        </div>
-        <div className="flex flex-col py-1">
-          <label htmlFor="emotion">How did you feel at this time?</label>
           <input
-            type="range"
-            name="emotion"
-            id="emotion"
-            min={0}
-            max={5}
-            className="accent-fg"
+            type="datetime-local"
+            className="text-2xl"
+            name="timestamp"
+            required
           />
         </div>
+
         <div className="flex flex-col py-1">
+          <span>How did you feel at this time?</span>
+          <EmotionPicker onChange={handleEmotion} size={300} />
+        </div>
+
+        {/*//TODO: Make this modal */}
+        <div className="flex flex-col items-center justify-center py-1">
           <textarea
             name="note"
             rows={5}
-            className="border-muted resize-y rounded border p-2 text-xl focus:outline-none"
+            className="border-muted w-full resize-none rounded border p-2 text-xl focus:outline-none"
             placeholder={reflection.note_prompt}
             required
           ></textarea>
         </div>
 
-        <div className="mt-8 flex w-full items-center justify-between">
-          {status !== "idle" ? (
-            <span className="text-sm capitalize italic">{status}</span>
-          ) : null}
-          <button
-            type="submit"
-            className="bg-fg text-bg ml-auto cursor-pointer rounded-full px-4 py-2 hover:brightness-125"
-            disabled={status !== "idle"}
-          >
-            Save
-          </button>
-        </div>
+        <button
+          type="submit"
+          className="bg-fg text-bg ml-auto cursor-pointer rounded-full px-4 py-2 hover:brightness-125"
+          disabled={status !== "idle"}
+        >
+          Save
+        </button>
       </form>
     </div>
   );

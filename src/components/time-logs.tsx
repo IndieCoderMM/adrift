@@ -19,7 +19,14 @@ const TimeLogs = () => {
         (entry) => JSON.parse(entry.value) as TimeEntry,
       );
 
-      if (entries?.length) setEntries(entries);
+      if (entries?.length) {
+        entries.sort(
+          (a, b) =>
+            new Date(a.createdAt ?? "").getTime() -
+            new Date(b.createdAt ?? "").getTime(),
+        );
+        setEntries(entries);
+      }
       setIsLoading(false);
     })();
   }, []);
