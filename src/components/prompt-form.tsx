@@ -2,6 +2,7 @@
 
 import { generateReflectionPrompt, getAiPrompt } from "@/lib/ai";
 import { usePuterStore } from "@/lib/puter";
+import { useAppStore } from "@/lib/store";
 import { generateID, getEntryKey, getQuestionKey } from "@/utils/storage";
 import { FormEventHandler, useState } from "react";
 
@@ -19,10 +20,16 @@ const PromptForm = () => {
   });
   const kv = usePuterStore((s) => s.kv);
   const ai = usePuterStore((s) => s.ai);
+  const auth = usePuterStore((s) => s.auth);
+  const setOpenLogin = useAppStore((s) => s.setOpenLogin);
   const [status, setStatus] = useState<Status>("idle");
   const [generating, setGenerating] = useState(false);
 
   const handleGenerateReflection = async () => {
+    if (!auth || !auth.isAuthenticated) {
+      setOpenLogin(true);
+      return;
+    }
     try {
       setGenerating(true);
       // BUG: Why this feedback is cached?
@@ -45,6 +52,11 @@ const PromptForm = () => {
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
+    if (!auth || !auth.isAuthenticated) {
+      setOpenLogin(true);
+      return;
+    }
+
     const form = e.currentTarget.closest("form");
     if (!form) {
       console.log("Form not found");
@@ -95,8 +107,6 @@ const PromptForm = () => {
       }, 5000);
     }
   };
-
-  console.log(reflection);
 
   return (
     <div>

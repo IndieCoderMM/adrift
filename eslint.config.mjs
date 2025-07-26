@@ -13,6 +13,7 @@ const eslintConfig = [
   ...compat.config({
     extends: ["next/core-web-vitals", "next/typescript"],
     rules: {
+      "@next/next/no-sync-scripts": "warn",
       "@typescript-eslint/no-explicit-any": "warn",
     },
   }),

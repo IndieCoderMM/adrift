@@ -33,5 +33,5 @@ body {
 }
 
 .btn {
-  @apply border-border rounded border border-b-2 p-2;
+  @apply border-fg rounded border border-b-2 p-2;
 }

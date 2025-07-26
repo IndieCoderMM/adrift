@@ -2,7 +2,6 @@ import LoginPortal from "@/components/login-portal";
 import Navbar from "@/components/navbar";
 import type { Metadata } from "next";
 import { Space_Grotesk } from "next/font/google";
-import Script from "next/script";
 import "./globals.css";
 
 const mainFont = Space_Grotesk({
@@ -28,7 +27,7 @@ export default function RootLayout({
         <Navbar />
         {children}
         <LoginPortal />
-        <Script src="https://js.puter.com/v2/"></Script>
+        <script src="https://js.puter.com/v2/"></script>
       </body>
     </html>
   );

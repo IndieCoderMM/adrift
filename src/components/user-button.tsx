@@ -17,11 +17,16 @@ const UserButton = () => {
     <div>
       <div className="flex items-center gap-2">
         {auth.isAuthenticated ? (
-          <span className="font-medium">{auth.user?.username}</span>
+          <button
+            className="cursor-pointer font-medium"
+            onClick={() => setOpenLogin(true)}
+          >
+            {auth.user?.username}
+          </button>
         ) : (
           <button
             type="button"
-            className="p-2 italic underline"
+            className="cursor-pointer p-2 italic underline"
             onClick={() => setOpenLogin(true)}
           >
             Login
