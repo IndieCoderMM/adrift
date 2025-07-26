@@ -5,7 +5,7 @@
   --foreground: #171717;
 
   --secondary: #777777;
-  --border: #333;
+  --border: #eee;
 }
 
 @theme inline {

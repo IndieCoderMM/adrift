@@ -1,7 +1,6 @@
 import PromptForm from "@/components/prompt-form";
 import Sidebar from "@/components/sidebar";
 import TimeLogs from "@/components/time-logs";
-import { sampleEntries } from "@/utils/data";
 
 export default function Home() {
   return (
@@ -13,7 +12,7 @@ export default function Home() {
         <PromptForm />
       </div>
       <div className="col-span-3 p-2">
-        <TimeLogs logs={sampleEntries} />
+        <TimeLogs />
       </div>
     </main>
   );

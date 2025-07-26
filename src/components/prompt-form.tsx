@@ -1,13 +1,22 @@
 "use client";
 
+import { getAiPrompt } from "@/lib/ai";
 import { usePuterStore } from "@/lib/puter";
 import { generateID, getEntryKey } from "@/utils/storage";
-import { FormEventHandler } from "react";
+import { FormEventHandler, useState } from "react";
+
+const emotions = ["very sad", "sad", "neutral", "happy", "very happy"];
+
+type Status = "idle" | "uploading" | "processing" | "error" | "success";
 
 const PromptForm = () => {
-  const prompt = "When did I last phone a friend?";
+  const prompt: Prompt = {
+    question: "When did I last phone a family member?",
+    action: "phoned a friend",
+  };
   const kv = usePuterStore((s) => s.kv);
   const ai = usePuterStore((s) => s.ai);
+  const [status, setStatus] = useState<Status>("idle");
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
@@ -24,27 +33,47 @@ const PromptForm = () => {
 
     const id = generateID();
 
-    const data = {
+    const data: Partial<TimeEntry> = {
       id,
-      label: prompt,
       timestamp,
-      emotion,
       note,
+      label: prompt.question,
+      action: prompt.action,
+      emotion: emotions[Math.max(Number(emotion), emotions.length - 1)],
+      tags: [],
     };
 
     try {
+      setStatus("uploading");
       await kv.set(getEntryKey(id), JSON.stringify(data));
 
-      //const feedback = await ai.feedback();
+      setStatus("processing");
+      const feedback = await ai.feedback(getAiPrompt({ entry: data }));
+      if (!feedback) return setStatus("error");
+      const feedbackText =
+        typeof feedback.message.content === "string"
+          ? feedback.message.content
+          : feedback.message.content[0].text;
+
+      data.feedback = JSON.parse(feedbackText);
+      //data.tags = Array.isArray(data.feedback?.tags) ? data.feedback.tags : [];
+      await kv.set(getEntryKey(id), JSON.stringify(data));
+      setStatus("success");
+      form.reset();
     } catch (err) {
       console.error(err);
+      setStatus("error");
+    } finally {
+      setTimeout(() => {
+        setStatus("idle");
+      }, 5000);
     }
   };
 
   return (
     <div>
       <div className="mb-2 flex items-center gap-4">
-        <h2 className="text-2xl capitalize">{prompt}</h2>
+        <h2 className="text-2xl capitalize">{prompt.question}</h2>
         <button
           type="button"
           className="text-secondary cursor-pointer text-sm italic underline"
@@ -77,10 +106,14 @@ const PromptForm = () => {
           ></textarea>
         </div>
 
-        <div className="mt-8 flex w-full justify-end">
+        <div className="mt-8 flex w-full items-center justify-between">
+          {status !== "idle" ? (
+            <span className="text-sm capitalize italic">{status}</span>
+          ) : null}
           <button
             type="submit"
-            className="bg-fg text-bg cursor-pointer rounded-full px-4 py-2 hover:brightness-125"
+            className="bg-fg text-bg ml-auto cursor-pointer rounded-full px-4 py-2 hover:brightness-125"
+            disabled={status !== "idle"}
           >
             Save
           </button>

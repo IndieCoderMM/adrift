@@ -20,7 +20,7 @@ declare global {
       kv: {
         get: (key: string) => Promise<string | null>;
         set: (key: string, value: string) => Promise<boolean>;
-        delete: (key: string) => Promise<boolean>;
+        del: (key: string) => Promise<boolean>;
         list: (pattern: string, returnValues?: boolean) => Promise<string[]>;
         flush: () => Promise<boolean>;
       };
@@ -48,10 +48,7 @@ interface PuterStore {
       testMode?: boolean,
       options?: PuterChatOptions,
     ) => Promise<AIResponse | undefined>;
-    feedback: (
-      path: string,
-      message: string,
-    ) => Promise<AIResponse | undefined>;
+    feedback: (message: string) => Promise<AIResponse | undefined>;
   };
   kv: {
     get: (key: string) => Promise<string | null | undefined>;
@@ -254,7 +251,7 @@ export const usePuterStore = create<PuterStore>((set, get) => {
     >;
   };
 
-  const feedback = async (path: string, message: string) => {
+  const feedback = async (message: string) => {
     const puter = getPuter();
     if (!puter) {
       setError("Puter.js not available");
@@ -266,10 +263,6 @@ export const usePuterStore = create<PuterStore>((set, get) => {
         {
           role: "user",
           content: [
-            {
-              type: "file",
-              puter_path: path,
-            },
             {
               type: "text",
               text: message,
@@ -305,7 +298,7 @@ export const usePuterStore = create<PuterStore>((set, get) => {
       setError("Puter.js not available");
       return;
     }
-    return puter.kv.delete(key);
+    return puter.kv.del(key);
   };
 
   const listKV = async (pattern: string, returnValues?: boolean) => {
@@ -349,7 +342,7 @@ export const usePuterStore = create<PuterStore>((set, get) => {
         testMode?: boolean,
         options?: PuterChatOptions,
       ) => chat(prompt, imageURL, testMode, options),
-      feedback: (path: string, message: string) => feedback(path, message),
+      feedback: (message: string) => feedback(message),
     },
     kv: {
       get: (key: string) => getKV(key),
