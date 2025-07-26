@@ -4,14 +4,17 @@ type TimeEntry = {
   timestamp: string;
   action: string;
   emotion: string;
+  reflection_id: string;
   note?: string;
   feedback?: AIFeedback;
-  tags?: string[];
 };
 
-type Prompt = {
+type Reflection = {
+  id: string;
   question: string;
   action: string;
+  note_prompt: string;
+  type: string;
 };
 
 type AIFeedback = {

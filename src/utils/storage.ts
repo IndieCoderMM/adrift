@@ -7,3 +7,7 @@ export const generateID = () => {
 export const getEntryKey = (id: string) => {
   return `entries:${id}`;
 };
+
+export const getQuestionKey = (id: string) => {
+  return `questions:${id}`;
+};

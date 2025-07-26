@@ -4,9 +4,12 @@ AI-powered journaling app for capturing emotional moments over time, with smart 
 
 ## Todos
 
-- [ ] Add auth
-- [ ] Create kv store
-- [ ] Integrate AI
+- [x] Add auth
+- [x] Create kv store
+- [x] Integrate AI
+- [ ] Prompt generation
+- [ ] Multi-step form
 - [ ] Analysis Page
 - [ ] Chart
+- [ ] Settings
 - [ ] Export data

@@ -1,8 +1,8 @@
 "use client";
 
-import { getAiPrompt } from "@/lib/ai";
+import { generateReflectionPrompt, getAiPrompt } from "@/lib/ai";
 import { usePuterStore } from "@/lib/puter";
-import { generateID, getEntryKey } from "@/utils/storage";
+import { generateID, getEntryKey, getQuestionKey } from "@/utils/storage";
 import { FormEventHandler, useState } from "react";
 
 const emotions = ["very sad", "sad", "neutral", "happy", "very happy"];
@@ -10,13 +10,38 @@ const emotions = ["very sad", "sad", "neutral", "happy", "very happy"];
 type Status = "idle" | "uploading" | "processing" | "error" | "success";
 
 const PromptForm = () => {
-  const prompt: Prompt = {
-    question: "When did I last phone a family member?",
-    action: "phoned a friend",
-  };
+  const [reflection, setReflection] = useState<Reflection>({
+    id: "test",
+    question: "When did I last talk with a family member?",
+    action: "phoned a family",
+    note_prompt: "Any memorable thing about this moment?",
+    type: "family",
+  });
   const kv = usePuterStore((s) => s.kv);
   const ai = usePuterStore((s) => s.ai);
   const [status, setStatus] = useState<Status>("idle");
+  const [generating, setGenerating] = useState(false);
+
+  const handleGenerateReflection = async () => {
+    try {
+      setGenerating(true);
+      // BUG: Why this feedback is cached?
+      const feedback = await ai.feedback(generateReflectionPrompt("family"));
+      if (!feedback) throw new Error("Failed to generate question");
+      const feedbackText =
+        typeof feedback.message.content === "string"
+          ? feedback.message.content
+          : feedback.message.content[0].text;
+
+      const reflection = JSON.parse(feedbackText) as Reflection;
+      const id = generateID();
+      setReflection({ ...reflection, id });
+    } catch (err) {
+      console.log("Failed to generate reflection: ", err);
+    } finally {
+      setGenerating(false);
+    }
+  };
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
@@ -37,14 +62,15 @@ const PromptForm = () => {
       id,
       timestamp,
       note,
-      label: prompt.question,
-      action: prompt.action,
+      reflection_id: reflection.id,
+      label: reflection.question,
+      action: reflection.action,
       emotion: emotions[Math.max(Number(emotion), emotions.length - 1)],
-      tags: [],
     };
 
     try {
       setStatus("uploading");
+      await kv.set(getQuestionKey(reflection.id), JSON.stringify(reflection));
       await kv.set(getEntryKey(id), JSON.stringify(data));
 
       setStatus("processing");
@@ -70,15 +96,19 @@ const PromptForm = () => {
     }
   };
 
+  console.log(reflection);
+
   return (
     <div>
       <div className="mb-2 flex items-center gap-4">
-        <h2 className="text-2xl capitalize">{prompt.question}</h2>
+        <h2 className="text-2xl capitalize">{reflection.question}</h2>
         <button
           type="button"
           className="text-secondary cursor-pointer text-sm italic underline"
+          onClick={handleGenerateReflection}
+          disabled={generating}
         >
-          Skip
+          {generating ? "Generating..." : "Skip"}
         </button>
       </div>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
@@ -101,7 +131,7 @@ const PromptForm = () => {
             name="note"
             rows={5}
             className="border-muted resize-y rounded border p-2 text-xl focus:outline-none"
-            placeholder="Write one memorable about this time..."
+            placeholder={reflection.note_prompt}
             required
           ></textarea>
         </div>
