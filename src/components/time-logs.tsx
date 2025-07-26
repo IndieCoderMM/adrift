@@ -19,7 +19,7 @@ const TimeLogs = () => {
         (entry) => JSON.parse(entry.value) as TimeEntry,
       );
 
-      setEntries(entries);
+      if (entries?.length) setEntries(entries);
       setIsLoading(false);
     })();
   }, []);
