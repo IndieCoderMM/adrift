@@ -15,7 +15,7 @@ declare global {
           imageURL?: string | PuterChatOptions,
           testMode?: boolean,
           options?: PuterChatOptions,
-        ) => Promise<Object>;
+        ) => Promise<object>;
       };
       kv: {
         get: (key: string) => Promise<string | null>;

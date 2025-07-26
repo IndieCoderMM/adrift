@@ -44,7 +44,7 @@ interface PuterChatOptions {
     function: {
       name: string;
       description: string;
-      parameters: { type: string; properties: {} };
+      parameters: { type: string; properties: object };
     }[];
   };
 }
