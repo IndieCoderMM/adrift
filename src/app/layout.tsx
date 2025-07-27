@@ -1,13 +1,24 @@
 import LoginPortal from "@/components/login-portal";
 import Navbar from "@/components/navbar";
 import type { Metadata } from "next";
-import { Space_Grotesk } from "next/font/google";
+import { Lora, Patrick_Hand, Space_Grotesk } from "next/font/google";
 import { Flip, ToastContainer } from "react-toastify";
 import "./globals.css";
 
 const mainFont = Space_Grotesk({
   variable: "--font-main",
   subsets: ["latin"],
+});
+
+const headFont = Lora({
+  variable: "--font-head",
+  subsets: ["latin"],
+});
+
+const handFont = Patrick_Hand({
+  variable: "--font-hand",
+  subsets: ["latin"],
+  weight: "400",
 });
 
 export const metadata: Metadata = {
@@ -23,7 +34,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${mainFont.variable} relative min-h-screen antialiased`}
+        className={`${mainFont.variable} ${headFont.variable} ${handFont.variable} relative min-h-screen antialiased`}
       >
         <Navbar />
         {children}

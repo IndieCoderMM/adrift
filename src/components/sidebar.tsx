@@ -9,17 +9,14 @@ const Sidebar = () => {
           Home
         </Link>
         <Link href={"/stats"} className="btn">
-          Emotion Analysis
+          Statistics
         </Link>
         <Link href={"/calendar"} className="btn">
           Journal Calendar
         </Link>
-        <button type="button" className="btn">
-          Memory Portal
-        </button>
-        <button type="button" className="btn">
-          Mood Timeline
-        </button>
+        <Link href="/analysis" className="btn">
+          Emotional Analysis
+        </Link>
         <button type="button" className="btn">
           Jump to Date
         </button>

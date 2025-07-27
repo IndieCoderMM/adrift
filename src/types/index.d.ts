@@ -27,3 +27,12 @@ type AIFeedback = {
   tags: string[];
   category: string[];
 };
+
+type AIEmotionInsight = {
+  emotional_overview: string;
+  personal_highlights: string[];
+  emotional_dynamics: string[];
+  resilience_signals: string[];
+  growth_opportunities: string[];
+  follow_up_questions: string[];
+};

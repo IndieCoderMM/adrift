@@ -1,3 +1,54 @@
+type ZippedEntry = {
+  date: string;
+  action: string;
+  emotion: string;
+  summary?: string;
+};
+
+export const zipRecentEntries = (
+  entries: TimeEntry[],
+  limit = 10,
+): ZippedEntry[] => {
+  return [...entries]
+    .sort(
+      (a, b) =>
+        new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime(),
+    )
+    .slice(0, limit)
+    .map((entry) => ({
+      date: entry.timestamp,
+      action: entry.action,
+      emotion: entry.emotion,
+      note: entry.note,
+      summary: entry.feedback?.emotional_insight,
+    }));
+};
+
+export const getInsightPrompot = (zippedData: ZippedEntry[]): string => {
+  const data = JSON.stringify(zippedData, null, 2);
+
+  return `You are an emotionally intelligent assistant helping the user reflect deeply on their recent emotional experiences.
+
+Given the journal entries below, analyze them and return a structured, human-like summary *as if you are speaking directly to the user*, using a caring and supportive tone. Your goal is to help the user gain emotional clarity, recognize patterns, and gently guide growth.
+
+Return the output strictly as a JSON object in the following format — **no extra commentary or backticks**:
+
+{
+  "emotional_overview": "2-3 sentence summary of user's overall emotional state.",
+  "personal_highlights": [ "Insightful moments you've noticed—focus on personal wins or values reflected." ],
+  "emotional_dynamics": [ "Noticeable changes, shifts in mood, inner conflicts, or emotional turning points." ],
+  "resilience_signals": [ "Subtle signs of strength, emotional recovery, or self-care behaviors." ],
+  "growth_opportunities": [ "3 Practical, emotionally aware suggestions the user might explore." ],
+  "follow_up_questions": [ "3 Gently provocative questions to help the user reflect further." ]
+}
+
+Journal entries:
+START>>
+${data}
+<<END
+`;
+};
+
 export const generateReflectionPrompt = (
   type: string,
   previousQuestions: string[],

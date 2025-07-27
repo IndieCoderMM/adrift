@@ -116,7 +116,7 @@ const EntryView = ({ id }: { id: string }) => {
         </div>
 
         {/* Right Column: AI Review */}
-        <div className="max-h-[500px] space-y-4 overflow-y-auto rounded-xl border border-gray-200 bg-gray-50 p-5 shadow-sm">
+        <div className="max-h-[500px] space-y-4 overflow-y-auto rounded-xl bg-gradient-to-b from-green-100 to-white p-5 shadow-sm">
           <h2 className="text-lg font-semibold text-gray-800">AI Review</h2>
           {entry.feedback ? (
             <>
