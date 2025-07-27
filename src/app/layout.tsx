@@ -2,6 +2,7 @@ import LoginPortal from "@/components/login-portal";
 import Navbar from "@/components/navbar";
 import type { Metadata } from "next";
 import { Space_Grotesk } from "next/font/google";
+import { Flip, ToastContainer } from "react-toastify";
 import "./globals.css";
 
 const mainFont = Space_Grotesk({
@@ -27,6 +28,19 @@ export default function RootLayout({
         <Navbar />
         {children}
         <LoginPortal />
+        <ToastContainer
+          position="bottom-right"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick={false}
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+          transition={Flip}
+        />
         <script src="https://js.puter.com/v2/"></script>
       </body>
     </html>

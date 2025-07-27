@@ -1,7 +1,6 @@
 "use client";
 import { usePuterStore } from "@/lib/puter";
 import { getEntryKey } from "@/utils/storage";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -100,12 +99,13 @@ const EntryView = ({ id }: { id: string }) => {
           </div>
 
           <div className="flex justify-between">
-            <Link
-              href={"/"}
+            <button
+              type="button"
+              onClick={() => router.back()}
               className="cursor-pointer px-2 text-sm text-black hover:underline"
             >
               Back
-            </Link>
+            </button>
             <button
               onClick={handleDelete}
               className="cursor-pointer px-2 text-sm text-red-600 hover:underline"
@@ -193,7 +193,11 @@ const EntryView = ({ id }: { id: string }) => {
                 </div>
               </div>
             </>
-          ) : null}
+          ) : (
+            <p className="text-gray-500">
+              No AI review available for this entry.
+            </p>
+          )}
         </div>
       </div>
     </div>

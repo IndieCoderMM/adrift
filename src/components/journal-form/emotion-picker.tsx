@@ -1,3 +1,7 @@
+import {
+  emotions as defaultEmotions,
+  getEmotionVisual,
+} from "@/utils/emotions";
 import { useEffect, useRef, useState } from "react";
 
 type Props = {
@@ -6,19 +10,6 @@ type Props = {
   size?: number;
   emotions?: string[];
 };
-
-const defaultEmotions = [
-  "motivated",
-  "grateful",
-  "happy",
-  "excited",
-  "calm",
-  "depressed",
-  "sad",
-  "anxious",
-  "tired",
-  "lonely",
-];
 
 const EmotionPicker = ({
   emotions = defaultEmotions,
@@ -33,14 +24,14 @@ const EmotionPicker = ({
   const [selectedEmotion, setSelectedEmotion] = useState("neutral");
 
   const center = size / 2;
-  const radius = size / 3;
+  const radius = size / 2 - 20;
 
   useEffect(() => {
     let emotion = "";
     if (knob.d >= radius * 0.75) {
-      emotion = "super";
+      emotion = "Super";
     } else if (knob.d >= radius * 0.5) {
-      emotion = "very";
+      emotion = "Very";
     } else if (knob.d < radius * 0.25) {
       emotion = "neutral";
     }
@@ -71,19 +62,17 @@ const EmotionPicker = ({
         center,
         radius + 10,
         "12px Space Grotesk",
-        "#333",
       );
 
       ctx.beginPath();
-      ctx.fillStyle = "#4f46e5";
-
+      ctx.fillStyle = getEmotionVisual(selectedEmotion).color + "90";
       ctx.ellipse(knob.x, knob.y, 10, 10, 0, 0, 2 * Math.PI);
       ctx.arc(knob.x, knob.y, 10, 0, 2 * Math.PI);
       ctx.fill();
     };
 
     draw();
-  }, [angle, size, knob]);
+  }, [angle, size, knob, selectedEmotion, emotions]);
 
   const handleEvent = (e: MouseEvent | TouchEvent) => {
     const canvas = canvasRef.current;
@@ -146,9 +135,6 @@ const EmotionPicker = ({
         }}
         className="cursor-pointer"
       />
-      <div className="absolute top-0 left-0 text-center font-medium text-gray-700 capitalize">
-        Selected: {selectedEmotion}
-      </div>
     </div>
   );
 };
@@ -201,11 +187,11 @@ function drawRadialLabels(
   const angleStep = (2 * Math.PI) / total;
 
   ctx.font = font;
-  ctx.fillStyle = color;
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
 
   labels.forEach((label, i) => {
+    ctx.fillStyle = getEmotionVisual(label).color;
     const angle = -angleStep * i - angleStep / 2;
 
     const x = centerX + Math.cos(angle) * radius;

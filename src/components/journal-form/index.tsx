@@ -1,19 +1,29 @@
 "use client";
 
 import { usePuterStore } from "@/lib/puter";
+import { getEmotionVisual } from "@/utils/emotions";
 import { cn } from "@/utils/tailwind";
-import { useEffect } from "react";
+import { motion } from "motion/react";
+import { useEffect, useRef } from "react";
 import EmotionPicker from "./emotion-picker";
 import { useJournalForm } from "./use-journal-form";
 
+const slideIn = {
+  initial: { y: 100, opacity: 0 },
+  animate: { y: 0, opacity: 1 },
+};
+
 const JournalForm = () => {
+  const ref = useRef<HTMLInputElement | null>(null);
   const isLoading = usePuterStore((s) => s.isLoading);
+  const auth = usePuterStore((s) => s.auth);
   const {
     reflection,
     status,
     generating,
     step,
     skipped,
+    emotion,
     handleDateChange,
     handleGenerateReflection,
     handleEmotion,
@@ -22,11 +32,21 @@ const JournalForm = () => {
   } = useJournalForm();
 
   useEffect(() => {
-    if (isLoading) return;
+    if (ref.current) {
+      // Reset empty date
+      ref.current.value = "";
+    }
+  }, [reflection]);
 
-    // Auto generate first prompt
-    handleGenerateReflection(true);
-  }, [isLoading, handleGenerateReflection]);
+  // TODO: Uncomment this on production
+  // useEffect(() => {
+  //   if (isLoading || !auth.isAuthenticated) return;
+  //
+  //   // Auto generate first prompt
+  //   handleGenerateReflection(true);
+  // }, [isLoading, auth.isAuthenticated, handleGenerateReflection]);
+
+  const emotionVisual = getEmotionVisual(emotion);
 
   return (
     <div className="h-full">
@@ -37,14 +57,16 @@ const JournalForm = () => {
       </div>
       <form
         onSubmit={handleSubmit}
-        className="relative flex h-full flex-col gap-2 overflow-y-auto"
+        className="relative flex h-full flex-col gap-2 overflow-hidden"
       >
         <div className={cn("flex flex-col py-1")}>
           <input
+            ref={ref}
             type="datetime-local"
-            className="border-fg rounded border border-b-2 px-2 py-1 text-2xl"
+            className="border-fg rounded border border-b-2 px-2 py-1 text-2xl disabled:cursor-not-allowed"
             name="timestamp"
             onChange={handleDateChange}
+            disabled={generating}
             required
           />
           <button
@@ -65,30 +87,57 @@ const JournalForm = () => {
           </button>
         </div>
 
-        <div
-          className={cn(
-            "flex flex-col py-1",
-            step !== 1 ? "h-0 w-0 overflow-hidden" : "w-auto",
-          )}
-        >
-          <span>How did you feel at this time?</span>
-          <EmotionPicker onChange={handleEmotion} size={300} />
-        </div>
+        <div className="relative min-h-[50vh] w-full">
+          <motion.div
+            variants={slideIn}
+            initial={false}
+            animate={step === 1 ? "animate" : "initial"}
+            transition={{ type: "spring", stiffness: 350, damping: 30 }}
+            className={cn(
+              "absolute top-0 left-0 flex w-full flex-col py-1",
+              step !== 1 && "pointer-events-none opacity-0",
+            )}
+          >
+            <span>How did you feel at this time?</span>
+            <div className="grid md:grid-cols-5">
+              <div className="col-span-3 flex items-center">
+                <EmotionPicker onChange={handleEmotion} size={300} />
+              </div>
+              <div className="col-span-2 flex flex-col items-center justify-center">
+                <div className="flex items-center justify-center">
+                  <span className="text-7xl">{emotionVisual.emoji}</span>
+                </div>
+                <span
+                  className="mt-2 text-xl font-semibold capitalize"
+                  style={{
+                    color: emotionVisual.color,
+                  }}
+                >
+                  {emotion.length ? emotion : "Neutral"}
+                </span>
+              </div>
+            </div>
+          </motion.div>
 
-        {/*//TODO: Make this modal */}
-        <div
-          className={cn(
-            "flex flex-col py-1",
-            step !== 2 ? "h-0 w-0 overflow-hidden" : "w-auto",
-          )}
-        >
-          <textarea
-            name="note"
-            rows={5}
-            className="bg-muted/10 w-full resize-none rounded p-2 text-xl focus:outline-none"
-            placeholder={reflection.note_prompt}
-            required
-          ></textarea>
+          {/*//TODO: Make this modal */}
+          <motion.div
+            variants={slideIn}
+            initial={false}
+            animate={step === 2 ? "animate" : "initial"}
+            transition={{ type: "spring", stiffness: 350, damping: 30 }}
+            className={cn(
+              "absolute top-0 left-0 w-full py-1",
+              step !== 2 && "pointer-events-none opacity-0",
+            )}
+          >
+            <textarea
+              name="note"
+              rows={5}
+              className="border-fg bg-bg w-full resize-none rounded border p-2 text-xl focus:outline-none"
+              placeholder={reflection.note_prompt}
+              required
+            ></textarea>
+          </motion.div>
         </div>
         <div className="flex items-center gap-2">
           {step === 2 ? (

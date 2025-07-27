@@ -79,7 +79,10 @@ export const useJournalForm = () => {
 
         // BUG: Why this feedback is cached?
         const feedback = await ai.feedback(
-          generateReflectionPrompt(randType, answeredQuestions),
+          generateReflectionPrompt(randType, [
+            ...answeredQuestions,
+            reflection.type !== "loading" ? reflection.question : "",
+          ]),
         );
         if (!feedback) throw new Error("Failed to generate question");
         const feedbackText =
@@ -87,9 +90,12 @@ export const useJournalForm = () => {
             ? feedback.message.content
             : feedback.message.content[0].text;
 
-        const reflection = JSON.parse(feedbackText) as Reflection;
+        const generated = JSON.parse(feedbackText) as Reflection;
         const id = generateID();
-        setReflection({ ...reflection, id });
+        setReflection({ ...generated, id });
+        setStep(0);
+        setEmotion(""); // Reset emotion on new reflection
+        setStatus("idle");
       } catch (err) {
         console.log("Failed to generate reflection: ", err);
       } finally {

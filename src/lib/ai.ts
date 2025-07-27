@@ -2,17 +2,14 @@ export const generateReflectionPrompt = (
   type: string,
   previousQuestions: string[],
 ) => {
-  console.log("Previous questions: ", previousQuestions);
-
   return `You are a reflection coach AI that creates thoughtful, light and casual self-reflection prompts focused on personal actions.
 Your task is to generate a short, open-ended journaling question of the type: "${type}".
 Return a JSON object using this exact format - no extra text, no commentary, no backticks:
 {
   "question": "A concise, action-focused prompt phrased naturally as a question (e.g. 'When did I last check in with friends?')",
   "action": "Past-tense summary of the action (e.g. 'checked in with friends')",
-  "note_prompt": "A follow-up that invites the user to reflect on what made the moment meaningful or significant (e.g. 'What made this moment stand out?')",
+  "note_prompt": "One follow-up question that invites user to reflect on what made the moment meaningful",
   "type": "${type}",
-  "timestamp": "${new Date().toISOString()}"
 }
 
 Avoid generic or abstract questions. Do not repeat previous questions. Here are some examples of previous questions:
