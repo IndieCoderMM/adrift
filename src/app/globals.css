@@ -6,6 +6,7 @@
 
   --secondary: #777777;
   --border: #eee;
+  --accent: #3b82f6;
 }
 
 @theme inline {
@@ -17,6 +18,7 @@
   --color-bg: var(--background);
   --color-fg: var(--foreground);
   --color-secondary: var(--secondary);
+  --color-accent: var(--accent);
 
   --color-border: var(--border);
   --color-muted: #a3a3a3;
@@ -38,6 +40,28 @@ body {
   background-repeat: "repeat";
 }
 
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--color-muted);
+  border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-fg);
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+
 .btn {
-  @apply border-fg text-center flex items-center justify-center rounded border border-b-2 p-2;
+  @apply border-fg/80 hover:border-accent hover:text-accent transition-colors text-center flex items-center justify-center gap-1 rounded border-1 p-2;
+
+  &.active {
+    @apply border-accent text-accent border-b-2;
+  }
 }

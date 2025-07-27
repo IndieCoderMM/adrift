@@ -52,7 +52,7 @@ const TimeLogs = () => {
           variants={containerVariants}
           initial="initial"
           animate="animate"
-          className="flex max-h-[80vh] flex-col gap-4 overflow-y-auto"
+          className="flex max-h-[60vh] flex-col gap-4 overflow-y-auto"
         >
           {entries.slice(0, 20).map((log) => (
             <motion.li

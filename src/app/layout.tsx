@@ -1,5 +1,6 @@
 import LoginPortal from "@/components/login-portal";
 import Navbar from "@/components/navbar";
+import Sidebar from "@/components/sidebar";
 import type { Metadata } from "next";
 import { Lora, Patrick_Hand, Space_Grotesk } from "next/font/google";
 import { Flip, ToastContainer } from "react-toastify";
@@ -34,10 +35,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${mainFont.variable} ${headFont.variable} ${handFont.variable} relative min-h-screen antialiased`}
+        className={`${mainFont.variable} ${headFont.variable} ${handFont.variable} relative h-svh overflow-hidden antialiased`}
       >
         <Navbar />
-        {children}
+        <div className="grid h-full grid-cols-12">
+          <div className="col-span-2">
+            <Sidebar />
+          </div>
+          <div className="col-span-10 h-full overflow-y-auto">{children}</div>
+        </div>
         <LoginPortal />
         <ToastContainer
           position="bottom-right"

@@ -46,7 +46,7 @@ export function EmotionFrequencyOverTimeChart({ data }: Props) {
 
   return (
     <div className="p-4 capitalize">
-      <h2 className="mb-2 text-xl font-semibold">Mood Timeline</h2>
+      <h2 className="text-fg/80 mb-2 text-xl font-medium">Mood Timeline</h2>
       <ResponsiveContainer width="100%" height={300}>
         <LineChart data={chartData}>
           <XAxis dataKey="date" />

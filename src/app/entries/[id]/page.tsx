@@ -4,9 +4,9 @@ const EntryDetail = async ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = await params;
 
   return (
-    <div>
+    <main>
       <EntryView id={id} />
-    </div>
+    </main>
   );
 };
 

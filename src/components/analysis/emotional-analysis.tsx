@@ -10,8 +10,8 @@ const EmotionalAnalysis = () => {
   return (
     <div>
       {!insight ? (
-        <section className="px-6 py-12">
-          <div className="mx-auto max-w-3xl space-y-6">
+        <section className="">
+          <div className="max-w-3xl space-y-6">
             <p className="text-lg tracking-tight text-gray-600">
               Our AI analyzes your recent journal entries to surface emotional
               trends, identify patterns, and suggest meaningful steps forward.

@@ -31,7 +31,7 @@ const EntryList = () => {
   }
 
   return (
-    <div className="space-y-6 p-4">
+    <div className="mb-20 space-y-6 p-4">
       {Object.entries(groups).map(([date, dayEntries]) => (
         <div key={date}>
           <h3 className="mb-2 text-lg font-semibold text-gray-700">

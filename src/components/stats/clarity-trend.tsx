@@ -43,11 +43,16 @@ const ClarityTrendChart = ({ entries }: Props) => {
 
   return (
     <div className="p-4">
-      <h2 className="mb-3 text-xl font-semibold">Reflection Score Over Time</h2>
+      <h2 className="text-fg/80 mb-2 text-xl font-medium">
+        Reflection Score Over Time
+      </h2>
       <ResponsiveContainer width="100%" height={280}>
         <LineChart data={data}>
           <CartesianGrid strokeDasharray="3 3" strokeOpacity={0.1} />
-          <XAxis dataKey="date" tickFormatter={(d) => formatDate(d, "MMM D")} />
+          <XAxis
+            dataKey="date"
+            tickFormatter={(d) => formatDate(d, "YYYY-MM-DD")}
+          />
           <YAxis domain={[1, 5]} ticks={[1, 2, 3, 4, 5]} />
           <Tooltip formatter={(value: number) => [value, "Score"]} />
           <ReferenceLine

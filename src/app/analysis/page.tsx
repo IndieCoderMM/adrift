@@ -2,7 +2,7 @@ import EmotionalAnalysis from "@/components/analysis/emotional-analysis";
 
 const AnalysisPage = () => {
   return (
-    <main>
+    <main className="p-4">
       <EmotionalAnalysis />
     </main>
   );

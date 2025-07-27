@@ -35,7 +35,7 @@ const EmotionDistributionChart = ({ data }: Props) => {
 
   return (
     <div className="bg-white p-4 capitalize">
-      <h2 className="mb-2 text-xl font-semibold">Emotions Logged</h2>
+      <h2 className="text-fg/80 mb-2 text-xl font-medium">Emotions Logged</h2>
       <ResponsiveContainer width="100%" height={500}>
         <PieChart>
           <Pie
