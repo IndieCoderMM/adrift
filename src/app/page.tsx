@@ -1,4 +1,4 @@
-import PromptForm from "@/components/prompt-form";
+import JournalForm from "@/components/journal-form";
 import Sidebar from "@/components/sidebar";
 import TimeLogs from "@/components/time-logs";
 
@@ -9,7 +9,7 @@ export default function Home() {
         <Sidebar />
       </div>
       <div className="border-border col-span-7 border-x p-2">
-        <PromptForm />
+        <JournalForm />
       </div>
       <div className="col-span-3 p-2">
         <TimeLogs />

@@ -268,10 +268,4 @@ function valueToAngle(value: number) {
   return start + value * (end - start);
 }
 
-function angleToValue(angle: number) {
-  const start = Math.PI * 0.75;
-  const end = Math.PI * 2.25;
-  return Math.min(Math.max((angle - start) / (end - start), 0), 1);
-}
-
 export default EmotionPicker;

@@ -7,17 +7,25 @@ import { useEffect, useState } from "react";
 
 const EntryView = ({ id }: { id: string }) => {
   const kv = usePuterStore((s) => s.kv);
+  const [loading, setLoading] = useState(true);
   const [entry, setEntry] = useState<TimeEntry | null>(null);
   const router = useRouter();
 
   useEffect(() => {
     const loadEntry = async () => {
-      const item = await kv.get(getEntryKey(id));
-      if (!item) return;
+      setLoading(true);
+      try {
+        const item = await kv.get(getEntryKey(id));
+        if (!item) return;
 
-      const data = JSON.parse(item);
+        const data = JSON.parse(item);
 
-      setEntry(data);
+        setEntry(data);
+      } catch (err) {
+        console.error("Failed to load entry:", err);
+      } finally {
+        setLoading(false);
+      }
     };
 
     loadEntry();
@@ -33,7 +41,20 @@ const EntryView = ({ id }: { id: string }) => {
     }
   };
 
-  if (!entry) return null;
+  if (loading) {
+    return (
+      <div className="flex h-[80vh] items-center justify-center">
+        <span className="text-gray-500">Loading entry...</span>
+      </div>
+    );
+  }
+
+  if (!entry)
+    return (
+      <div className="flex h-[80vh] items-center justify-center">
+        <span className="text-red-500">Entry not found</span>
+      </div>
+    );
 
   return (
     <div>

@@ -22,8 +22,8 @@ const TimeLogs = () => {
       if (entries?.length) {
         entries.sort(
           (a, b) =>
-            new Date(a.createdAt ?? "").getTime() -
-            new Date(b.createdAt ?? "").getTime(),
+            new Date(b.createdAt ?? 0).getTime() -
+            new Date(a.createdAt ?? 0).getTime(),
         );
         setEntries(entries);
       }
@@ -44,10 +44,10 @@ const TimeLogs = () => {
       </div>
       {isLoading ? (
         <span>Loading entries...</span>
-      ) : entries.length === 0 ? (
+      ) : !entries || entries.length === 0 ? (
         <span>No entry yet.</span>
       ) : (
-        <ul className="flex flex-col gap-2">
+        <ul className="flex max-h-[80vh] flex-col gap-2 overflow-y-auto">
           {entries.map((log) => (
             <LogItem key={log.id} log={log} />
           ))}
