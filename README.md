@@ -1,6 +1,6 @@
 # Adrift: Smart Journal for Self-Reflection
 
-> _**Adrift** is a personal space to reflect, guided by AI. Capture feelings, find patterns, and reconnect with your inner self._
+**Adrift** is a personal space to reflect, guided by AI. Capture feelings, find patterns, and reconnect with your inner self.
 
 ## 🌐 Live Demo
 
@@ -8,20 +8,21 @@ Check out the live demo at [www.adrift.com](https://adrift-dev.vercl.app)
 
 ## ✨ Features
 
-- ✍️ **Guided Prompts** - Reflect on your day with AI-generated prompts.
-- 🧠 **AI-Powered Insights** — Smart tagging, summarization, and reflection analysis.
-- 📊 **Interactive Charts** — Visualize your emotional landscape over time.
-- 🧬 **Multi-Model Support** — Switch between different LLM Models.
-- 🔐 **Personal Cloud Sync** — Store your journal entries securely and access them anywhere.
+- ✍️ **Guided Prompts**: Reflect on your day with AI-generated prompts.
+- 🧠 **AI-Powered Insights**: Smart tagging, summarization, and reflection analysis.
+- 📊 **Interactive Charts**: Visualize your emotional landscape over time.
+- 🧬 **Multi-Model Support**: Switch between different LLM Models.
+- 🔐 **Personal Cloud Sync**: Store your journal entries securely and access them anywhere.
 
 ## 🧰 Tech Stack
 
-- Next.js
-- Puter.js
-- Zustand
-- Recharts
-- TailwindCSS
-- Motion
+- Next.js: React framework
+- Puter.js: serverless auth, cloud, and AI services
+- Zustand: state management
+- Recharts: charting library
+- TailwindCSS: CSS framework
+- ReactPDF: PDF generation
+- Motion: animations
 
 ## 📸 Screenshots
 
@@ -59,7 +60,7 @@ Feel free to contribute! Open issues or submit pull requests for new features, b
 
 ## 📃 License
 
-This project is licensed under the [MIT License](LICENSE).
+This project is licensed under the [MIT License](/LICENSE).
 
 ## ✅ Todos
 
