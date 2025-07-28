@@ -2,6 +2,7 @@
 
 import { usePuterStore } from "@/lib/puter";
 import { useAppStore } from "@/lib/store";
+import { IconUserCircle } from "@tabler/icons-react";
 import { useEffect } from "react";
 
 const UserButton = () => {
@@ -18,9 +19,10 @@ const UserButton = () => {
       <div className="flex items-center gap-2">
         {auth.isAuthenticated ? (
           <button
-            className="hover:text-accent cursor-pointer font-medium transition"
+            className="hover:text-accent flex cursor-pointer items-center justify-center gap-1 font-medium transition"
             onClick={() => setOpenLogin(true)}
           >
+            <IconUserCircle className="size-4 stroke-1" />
             {auth.user?.username}
           </button>
         ) : (

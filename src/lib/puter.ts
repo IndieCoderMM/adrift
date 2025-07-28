@@ -257,6 +257,7 @@ export const usePuterStore = create<PuterStore>((set, get) => {
       setError("Puter.js not available");
       return;
     }
+    const model = await puter.kv.get("settings:model");
 
     return puter.ai.chat(
       [
@@ -270,7 +271,7 @@ export const usePuterStore = create<PuterStore>((set, get) => {
           ],
         },
       ],
-      { model: "claude-3-7-sonnet" },
+      { model: model ?? "claude-3-7-sonnet" },
     ) as Promise<AIResponse | undefined>;
   };
 

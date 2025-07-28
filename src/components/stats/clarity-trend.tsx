@@ -1,4 +1,3 @@
-import { useEntriesByDay } from "@/hooks/use-entries-byday";
 import { formatDate } from "@/utils/day";
 import { useMemo } from "react";
 import {
@@ -17,29 +16,25 @@ type Props = {
 };
 
 const ClarityTrendChart = ({ entries }: Props) => {
-  const { groups, dates } = useEntriesByDay({ entries });
-
   const data = useMemo(() => {
-    if (!groups || Object.keys(groups).length === 0) return [];
-    dates.reverse();
+    if (!entries || entries.length === 0) return [];
+    const data = entries
+      .filter((entry) => entry.feedback && entry.createdAt)
+      .map((entry) => ({
+        date: formatDate(
+          new Date(entry.createdAt ?? 0).toISOString(),
+          "YYYY-MM-DD HH:mm",
+        ),
+        clarity: entry.feedback?.clarity ?? 0,
+      }));
 
-    const data = dates.map((date) => {
-      const group = groups[date] || [];
-      const clarityScores = group.map((entry) => entry.feedback?.clarity || 0);
-      const avgClarity =
-        clarityScores.length > 0
-          ? clarityScores.reduce((a: number, b: number) => a + b, 0) /
-            clarityScores.length
-          : 0;
-
-      return {
-        date: formatDate(date, "YYYY-MM-DD"),
-        clarity: avgClarity,
-      };
-    });
+    // Sort by date to ensure chronological order
+    data.sort(
+      (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
+    );
 
     return data;
-  }, [groups, dates]);
+  }, [entries]);
 
   return (
     <div className="p-4">
@@ -53,7 +48,7 @@ const ClarityTrendChart = ({ entries }: Props) => {
             dataKey="date"
             tickFormatter={(d) => formatDate(d, "YYYY-MM-DD")}
           />
-          <YAxis domain={[1, 5]} ticks={[1, 2, 3, 4, 5]} />
+          <YAxis domain={[0, 5]} ticks={[1, 2, 3, 4, 5]} />
           <Tooltip formatter={(value: number) => [value, "Score"]} />
           <ReferenceLine
             y={3}

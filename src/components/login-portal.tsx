@@ -4,6 +4,7 @@ import { useAppStore } from "@/lib/store";
 import { APP_FEATURES } from "@/utils/constants";
 import { IconCircleCheck, IconLogin2, IconX } from "@tabler/icons-react";
 import { toast } from "react-toastify";
+import UserProfileCard from "./profile-card";
 import { Portal } from "./ui/portal";
 
 const LoginPortal = () => {
@@ -20,7 +21,6 @@ const LoginPortal = () => {
     try {
       await auth.signIn();
       setOpenLogin(false);
-      toast.success("Logged in successfully!");
     } catch (error) {
       console.error("Login failed:", error);
       toast.error("Failed to log in.");
@@ -47,14 +47,10 @@ const LoginPortal = () => {
             <>
               {auth.isAuthenticated ? (
                 <>
-                  <div className="flex flex-col items-center gap-2 text-center">
-                    <h1 className="text-3xl font-semibold">
-                      {auth.user?.username}
-                    </h1>
-                  </div>
-                  <button className="btn w-full" onClick={auth.signOut}>
-                    Log Out
-                  </button>
+                  <UserProfileCard
+                    userName={auth?.user?.username ?? "Unknown"}
+                    onLogout={auth.signOut}
+                  />
                 </>
               ) : (
                 <>

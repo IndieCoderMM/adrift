@@ -14,8 +14,8 @@ import { usePathname } from "next/navigation";
 
 const navLinks = [
   { href: "/", label: "Journal", icon: IconNotebook },
+  { href: "/events", label: "Events", icon: IconCalendarEvent },
   { href: "/stats", label: "Statistics", icon: IconChartLine },
-  { href: "/calendar", label: "Events", icon: IconCalendarEvent },
   { href: "/analysis", label: "AI Analysis", icon: IconSparkles },
 ];
 

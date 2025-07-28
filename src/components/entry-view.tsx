@@ -2,6 +2,7 @@
 import { usePuterStore } from "@/lib/puter";
 import { getEmotionVisual } from "@/utils/emotions";
 import { getEntryKey } from "@/utils/storage";
+import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import {
   IconFileTextSpark,
   IconStar,
@@ -49,8 +50,11 @@ const EntryView = ({ id }: { id: string }) => {
 
   if (loading) {
     return (
-      <div className="flex h-[80vh] items-center justify-center">
-        <span className="text-gray-500">Loading entry...</span>
+      <div className="flex h-[80vh] flex-col items-center justify-center">
+        <div className="w-[400px]">
+          <DotLottieReact src="/anims/searching.lottie" loop autoplay />
+        </div>
+        <span className="text-secondary text-xl">Loading entry...</span>
       </div>
     );
   }

@@ -25,8 +25,8 @@ const NotFound = () => {
       </p>
       <div className="mt-4 flex justify-center">
         <Link href="/" className="btn mt-4 w-fit text-center text-xl">
+          <IconRocket className="mr-1 size-8 stroke-1" />
           Back to Home
-          <IconRocket className="size-8 stroke-1" />
         </Link>
       </div>
     </div>

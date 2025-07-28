@@ -53,7 +53,13 @@ const JournalForm = () => {
   if (isLoading || !auth.isAuthenticated) {
     return (
       <div className="flex w-full flex-col items-center">
-        <Image src={"/welcome.svg"} alt="Welcome" width={400} height={300} />
+        <Image
+          src={"/welcome.svg"}
+          priority
+          alt="Welcome"
+          width={400}
+          height={300}
+        />
         {isLoading ? (
           <p className="text-secondary text-center text-xl">Loading ...</p>
         ) : (

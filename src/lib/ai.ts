@@ -3,6 +3,7 @@ type ZippedEntry = {
   action: string;
   emotion: string;
   summary?: string;
+  insight?: string;
 };
 
 export const zipRecentEntries = (
@@ -19,8 +20,8 @@ export const zipRecentEntries = (
       date: entry.timestamp,
       action: entry.action,
       emotion: entry.emotion,
-      note: entry.note,
-      summary: entry.feedback?.emotional_insight,
+      summary: entry.feedback?.summary,
+      insight: entry.feedback?.emotional_insight,
     }));
 };
 

@@ -7,6 +7,8 @@ import { FormEventHandler, useCallback, useState } from "react";
 
 type FormStatus = "idle" | "uploading" | "processing" | "error" | "success";
 
+const LAST_REFLECTION_KEY = "lastReflection";
+
 export const useJournalForm = () => {
   const [reflection, setReflection] = useState<Reflection>({
     id: "loading",
@@ -67,6 +69,21 @@ export const useJournalForm = () => {
 
       try {
         setGenerating(true);
+        // Check local storage for last reflection
+        if (auto) {
+          const lastReflection = localStorage.getItem(LAST_REFLECTION_KEY);
+          if (lastReflection) {
+            const parsed = JSON.parse(lastReflection) as Reflection;
+            if (parsed.id && parsed.question) {
+              setReflection(parsed);
+              setStep(0);
+              setEmotion(""); // Reset emotion on new reflection
+              setStatus("idle");
+              return;
+            }
+          }
+        }
+
         const items = (await kv.list(getQuestionKey("*"), true)) as KVItem[];
         const entries = items?.map(
           (entry) => JSON.parse(entry.value) as Reflection,
@@ -77,7 +94,6 @@ export const useJournalForm = () => {
 
         const randType = types[Math.floor(Math.random() * types.length)];
 
-        // BUG: Why this feedback is cached?
         const feedback = await ai.feedback(
           generateReflectionPrompt(randType, [
             ...answeredQuestions,
@@ -96,6 +112,11 @@ export const useJournalForm = () => {
         setStep(0);
         setEmotion(""); // Reset emotion on new reflection
         setStatus("idle");
+        // Save to local storage
+        localStorage.setItem(
+          LAST_REFLECTION_KEY,
+          JSON.stringify({ ...generated, id }),
+        );
       } catch (err) {
         console.log("Failed to generate reflection: ", err);
       } finally {
@@ -151,6 +172,8 @@ export const useJournalForm = () => {
       setStatus("uploading");
       await kv.set(getQuestionKey(reflection.id), JSON.stringify(reflection));
       await kv.set(getEntryKey(id), JSON.stringify(data));
+      // Clear last reflection from local storage
+      localStorage.removeItem(LAST_REFLECTION_KEY);
 
       setStatus("processing");
       const feedback = await ai.feedback(getAiPrompt({ entry: data }));
