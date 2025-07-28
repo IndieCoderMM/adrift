@@ -18,7 +18,7 @@ const UserButton = () => {
       <div className="flex items-center gap-2">
         {auth.isAuthenticated ? (
           <button
-            className="cursor-pointer font-medium"
+            className="hover:text-accent cursor-pointer font-medium transition"
             onClick={() => setOpenLogin(true)}
           >
             {auth.user?.username}
@@ -26,7 +26,7 @@ const UserButton = () => {
         ) : (
           <button
             type="button"
-            className="cursor-pointer p-2 italic underline"
+            className="hover:text-accent cursor-pointer p-2 italic underline transition"
             onClick={() => setOpenLogin(true)}
           >
             Login

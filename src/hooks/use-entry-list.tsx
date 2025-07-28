@@ -32,7 +32,7 @@ export const useEntryList = () => {
         }
       } catch (error) {
         console.error("Failed to load entries:", error);
-        toast.error("Please try again later.");
+        toast.error("Failed to load entries.");
       } finally {
         setIsLoading(false);
       }

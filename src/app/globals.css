@@ -59,7 +59,7 @@ body {
 
 
 .btn {
-  @apply border-fg/80 cursor-pointer hover:border-accent hover:text-accent transition-colors text-center flex items-center justify-center gap-1 rounded border-1 p-2;
+  @apply border-fg/80 cursor-pointer disabled:cursor-not-allowed hover:border-accent hover:text-accent transition-colors text-center flex items-center justify-center gap-1 rounded border-1 p-2;
 
   &.active {
     @apply border-accent text-accent border-b-2;

@@ -18,7 +18,7 @@ const EmotionalAnalysis = () => {
     <div>
       {!insight ? (
         <>
-          <section className="flex max-w-3xl flex-col items-end gap-4 md:flex-row">
+          <section className="flex flex-col items-center gap-4 md:flex-row">
             <div className="">
               <Image src="/ai.svg" alt="AI analysis" width={300} height={300} />
             </div>
@@ -32,22 +32,17 @@ const EmotionalAnalysis = () => {
                   <button
                     onClick={handleAnalysis}
                     disabled={isLoading || analyzing}
-                    className={cn(
-                      `btn min-w-[200px] font-semibold`,
-                      isLoading || analyzing
-                        ? "cursor-not-allowed"
-                        : "hover:brightness-125",
-                    )}
+                    className={cn(`btn min-w-[200px] font-medium`)}
                   >
-                    <IconSparkles className="size-8" />
+                    <IconSparkles className="mr-1 size-8 stroke-1" />
                     {analyzing ? "Analyzing..." : "Get AI Insight"}
                   </button>
                 ) : (
                   <button
                     onClick={() => setOpenLogin(true)}
-                    className="btn min-w-[200px] font-semibold"
+                    className="btn min-w-[200px] font-medium"
                   >
-                    <IconLogin2 className="mr-1 size-8" />
+                    <IconLogin2 className="mr-1 size-8 stroke-1" />
                     Log in
                   </button>
                 )}

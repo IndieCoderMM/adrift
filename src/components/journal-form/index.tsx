@@ -41,12 +41,12 @@ const JournalForm = () => {
   }, [reflection]);
 
   // TODO: Uncomment this on production
-  // useEffect(() => {
-  //   if (isLoading || !auth.isAuthenticated) return;
-  //
-  //   // Auto generate first prompt
-  //   handleGenerateReflection(true);
-  // }, [isLoading, auth.isAuthenticated, handleGenerateReflection]);
+  useEffect(() => {
+    if (isLoading || !auth.isAuthenticated) return;
+
+    // Auto generate first prompt
+    handleGenerateReflection(true);
+  }, [isLoading, auth.isAuthenticated, handleGenerateReflection]);
 
   const emotionVisual = getEmotionVisual(emotion);
 

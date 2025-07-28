@@ -1,4 +1,5 @@
 "use client";
+import { PDFDownloadLink } from "@react-pdf/renderer";
 import {
   IconAffiliate,
   IconFileTypePdf,
@@ -9,7 +10,8 @@ import {
   IconStar,
   IconTimeline,
 } from "@tabler/icons-react";
-import React, { useRef } from "react";
+import React from "react";
+import PDFRender from "./pdf-render";
 
 const Section = ({
   title,
@@ -38,35 +40,25 @@ const ListBlock = ({ items }: { items: string[] }) => (
 );
 
 const InsightDisplay = ({ insight }: { insight: AIEmotionInsight }) => {
-  const printRef = useRef<HTMLDivElement>(null);
-
-  const handleExport = async () => {
-    if (!printRef.current) return;
-    // @ts-ignore
-    const html2pdf = (await import("html2pdf.js")).default;
-    html2pdf()
-      .from(printRef.current)
-      .set({
-        margin: 10,
-        filename: `ai-insight-${new Date().toISOString()}.pdf`,
-        image: { type: "jpeg", quality: 0.98 },
-        html2canvas: { scale: 2 },
-        jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
-        pagebreak: { mode: ["avoid-all", "css", "legacy"] },
-      })
-      .save();
-  };
-
   return (
     <main className="relative min-h-screen pb-20">
-      <button
-        onClick={handleExport}
+      <PDFDownloadLink
+        document={<PDFRender insight={insight} />}
+        fileName={`ai_insight_${new Date().toISOString()}.pdf`}
         className="bg-fg text-bg fixed right-4 bottom-4 flex cursor-pointer items-center justify-center rounded-full px-4 py-2 hover:brightness-125"
       >
-        <IconFileTypePdf className="mr-2 size-5" />
-        Export PDF
-      </button>
-      <div ref={printRef} className="mx-auto max-w-3xl border p-8">
+        {({ loading }) =>
+          loading ? (
+            "Preparing..."
+          ) : (
+            <>
+              <IconFileTypePdf className="mr-2 size-5" />
+              Export PDF
+            </>
+          )
+        }
+      </PDFDownloadLink>
+      <div className="max-w-3xl px-8">
         <header className="mb-12">
           <div className="mb-3 flex items-center gap-2">
             <IconSparkles className="text-fg size-9 stroke-1" />

@@ -30,7 +30,7 @@ export const useEmotionalAnalysis = () => {
       setInsight(generated);
     } catch (error) {
       console.error("Error during emotional analysis:", error);
-      toast.error("Failed to analyze your entries. Please try again.");
+      toast.error("Failed to get analysis");
     } finally {
       setAnalyzing(false);
     }
