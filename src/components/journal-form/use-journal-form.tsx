@@ -90,7 +90,14 @@ export const useJournalForm = () => {
         );
 
         const answeredQuestions = entries?.map((e) => e.question) || [];
-        const types = ["family", "work", "friends", "self"];
+        const types = [
+          "family",
+          "work",
+          "friends",
+          "self",
+          "health",
+          "hobbies",
+        ];
 
         const randType = types[Math.floor(Math.random() * types.length)];
 
