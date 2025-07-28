@@ -9,8 +9,11 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@lottiefiles/dotlottie-react": "^0.14.4",
     "@tabler/icons-react": "^3.34.1",
     "dayjs": "^1.11.13",
+    "dom-to-pdf": "^0.3.2",
+    "html2pdf.js": "^0.10.3",
     "motion": "^12.23.9",
     "next": "15.4.4",
     "react": "19.1.0",

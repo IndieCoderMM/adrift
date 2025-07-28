@@ -4,7 +4,9 @@ import { useEntriesByDay } from "@/hooks/use-entries-byday";
 import { useEntryList } from "@/hooks/use-entry-list";
 import { formatDate } from "@/utils/day";
 import { getEmotionVisual } from "@/utils/emotions";
+import { IconClock } from "@tabler/icons-react";
 import Link from "next/link";
+import EmptyEntry from "../empty-entry";
 
 const EntryList = () => {
   const { entries, isLoading } = useEntryList();
@@ -17,9 +19,12 @@ const EntryList = () => {
         {Array.from({ length: 2 }).map((_, index) => (
           <div key={index} className="animate-pulse">
             <div className="mb-2 h-6 w-[120px] rounded bg-gray-100" />
-            <ul className="border-muted relative flex flex-col gap-2 border-l pl-4">
+            <ul className="relative flex flex-col gap-2 border-l border-gray-100 pl-4">
               {Array.from({ length: 2 }).map((_, idx) => (
-                <li key={idx} className="flex items-center space-x-2">
+                <li
+                  key={idx}
+                  className="flex w-full max-w-4xl items-center space-x-2"
+                >
                   <div className="h-24 w-full rounded bg-gray-100" />
                 </li>
               ))}
@@ -30,8 +35,12 @@ const EntryList = () => {
     );
   }
 
+  if (entries.length === 0) {
+    return <EmptyEntry />;
+  }
+
   return (
-    <div className="mb-20 space-y-6 p-4">
+    <div className="mb-20 w-full space-y-6 p-4">
       {Object.entries(groups).map(([date, dayEntries]) => (
         <div key={date}>
           <h3 className="mb-2 text-lg font-semibold text-gray-700">
@@ -39,7 +48,7 @@ const EntryList = () => {
           </h3>
           <ul className="border-muted relative flex flex-col gap-2 border-l pl-4">
             {dayEntries.map((entry) => (
-              <li key={entry.id} className="">
+              <li key={entry.id} className="max-w-4xl">
                 <div className="border-muted bg-bg absolute left-0 h-2 w-2 -translate-x-1/2 translate-y-2 rounded-full border" />
                 <Link
                   href={`/entries/${entry.id}`}
@@ -49,13 +58,16 @@ const EntryList = () => {
                     {entry.label}
                   </p>
                   {entry.note && (
-                    <p className="mt-1 w-[90%] truncate text-sm text-gray-500">
+                    <p className="mt-1 truncate text-sm text-gray-500">
                       {entry.note}
                     </p>
                   )}
                   <div className="mt-1 flex items-center gap-4">
-                    <div className="text-muted text-xs capitalize">
-                      {formatDate(entry.timestamp, "hh:mm a")}
+                    <div className="text-muted iitems-center flex gap-1 text-xs">
+                      <div className="flex items-center">
+                        <IconClock className="size-4 stroke-1" />
+                        {formatDate(entry.timestamp, "hh:mm a")}
+                      </div>
                       {entry.emotion && (
                         <>
                           <span className="mx-1">•</span>

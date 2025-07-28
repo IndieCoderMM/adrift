@@ -1,5 +1,6 @@
 "use client";
 import { useEntryList } from "@/hooks/use-entry-list";
+import { usePuterStore } from "@/lib/puter";
 import { motion } from "motion/react";
 import Link from "next/link";
 import LogItem from "./log-item";
@@ -19,11 +20,16 @@ const itemVariants = {
 };
 
 const TimeLogs = () => {
+  const auth = usePuterStore((s) => s.auth);
   const { entries, isLoading } = useEntryList();
 
+  if (!auth.isAuthenticated) {
+    return null;
+  }
+
   return (
-    <div className="w-full">
-      <div className="mb-2 flex items-center justify-between">
+    <div className="border-border w-full max-w-[300px] border-l p-2">
+      <div className="mb-2 flex w-full items-center justify-between">
         <h2>Recent Activities</h2>
         <Link
           href={"/calendar"}

@@ -1,8 +1,15 @@
 "use client";
 import { usePuterStore } from "@/lib/puter";
+import { getEmotionVisual } from "@/utils/emotions";
 import { getEntryKey } from "@/utils/storage";
+import {
+  IconFileTextSpark,
+  IconStar,
+  IconStarFilled,
+} from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import PersonalNoteEditor from "./note-editor";
 
 const EntryView = ({ id }: { id: string }) => {
   const kv = usePuterStore((s) => s.kv);
@@ -55,6 +62,8 @@ const EntryView = ({ id }: { id: string }) => {
       </div>
     );
 
+  const emoteVisual = getEmotionVisual(entry.emotion);
+
   return (
     <div>
       <div className="mx-auto grid max-w-6xl grid-cols-1 gap-6 p-6 md:grid-cols-2">
@@ -73,30 +82,17 @@ const EntryView = ({ id }: { id: string }) => {
             <label className="mb-1 block text-sm font-medium text-gray-700">
               Emotion
             </label>
-            <p className="text-base font-medium text-indigo-600 capitalize">
-              {entry.emotion}
+            <p
+              style={{
+                color: emoteVisual.color,
+              }}
+              className="text-base font-medium capitalize"
+            >
+              {emoteVisual.emoji} {entry.emotion}
             </p>
           </div>
 
-          <div>
-            <div className="flex items-center justify-between">
-              <label
-                htmlFor="note"
-                className="mb-1 block text-sm font-medium text-gray-700"
-              >
-                Personal Note
-              </label>
-              <button className="cursor-pointer px-2 text-sm text-indigo-600 hover:underline">
-                Edit
-              </button>
-            </div>
-            <textarea
-              id="note"
-              className="min-h-[120px] w-full resize-none rounded-md border border-gray-300 p-3 text-sm shadow-sm focus:outline-none"
-              defaultValue={entry.note}
-              readOnly
-            />
-          </div>
+          <PersonalNoteEditor entry={entry} />
 
           <div className="flex justify-between">
             <button
@@ -117,7 +113,10 @@ const EntryView = ({ id }: { id: string }) => {
 
         {/* Right Column: AI Review */}
         <div className="max-h-[500px] space-y-4 overflow-y-auto rounded-xl bg-gradient-to-b from-green-50 via-green-50/10 to-white p-5 shadow-sm">
-          <h2 className="text-lg font-semibold text-gray-800">AI Review</h2>
+          <div className="flex items-center gap-2">
+            <IconFileTextSpark className="size-6 text-green-800" />
+            <h2 className="text-lg font-semibold text-green-800">AI Review</h2>
+          </div>
           {entry.feedback ? (
             <>
               <div>
@@ -137,10 +136,21 @@ const EntryView = ({ id }: { id: string }) => {
               </div>
 
               <div>
-                <h3 className="text-sm font-medium text-gray-600">Clarity</h3>
-                <p className="mt-1 text-sm text-gray-800">
-                  {entry.feedback.clarity}/5
-                </p>
+                <h3 className="text-sm font-medium text-gray-600">
+                  Reflection Score
+                </h3>
+                <div className="flex items-center gap-1">
+                  {Array.from({ length: 5 }, (_, i) =>
+                    i < (entry.feedback?.clarity ?? 0) ? (
+                      <IconStarFilled
+                        key={i}
+                        className={`size-5 text-yellow-400`}
+                      />
+                    ) : (
+                      <IconStar key={i} className="text-muted/50 size-5" />
+                    ),
+                  )}
+                </div>
               </div>
 
               <div>

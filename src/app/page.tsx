@@ -3,13 +3,11 @@ import TimeLogs from "@/components/time-logs";
 
 export default function Home() {
   return (
-    <main className="grid h-full grid-cols-12">
-      <div className="col-span-8 p-4">
+    <main className="flex h-full">
+      <div className="flex-1 p-4">
         <JournalForm />
       </div>
-      <div className="border-border col-span-4 border-l p-2">
-        <TimeLogs />
-      </div>
+      <TimeLogs />
     </main>
   );
 }

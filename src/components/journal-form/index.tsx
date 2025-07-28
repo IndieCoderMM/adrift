@@ -4,7 +4,9 @@ import { usePuterStore } from "@/lib/puter";
 import { getEmotionVisual } from "@/utils/emotions";
 import { cn } from "@/utils/tailwind";
 import { motion } from "motion/react";
+import Image from "next/image";
 import { useEffect, useRef } from "react";
+import HeroSection from "../hero";
 import EmotionPicker from "./emotion-picker";
 import { useJournalForm } from "./use-journal-form";
 
@@ -47,6 +49,19 @@ const JournalForm = () => {
   // }, [isLoading, auth.isAuthenticated, handleGenerateReflection]);
 
   const emotionVisual = getEmotionVisual(emotion);
+
+  if (isLoading || !auth.isAuthenticated) {
+    return (
+      <div className="flex w-full flex-col items-center">
+        <Image src={"/welcome.svg"} alt="Welcome" width={400} height={300} />
+        {isLoading ? (
+          <p className="text-secondary text-center text-xl">Loading ...</p>
+        ) : (
+          <HeroSection />
+        )}
+      </div>
+    );
+  }
 
   return (
     <div className="h-full">

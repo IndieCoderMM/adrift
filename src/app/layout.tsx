@@ -2,7 +2,7 @@ import LoginPortal from "@/components/login-portal";
 import Navbar from "@/components/navbar";
 import Sidebar from "@/components/sidebar";
 import type { Metadata } from "next";
-import { Lora, Patrick_Hand, Space_Grotesk } from "next/font/google";
+import { Lora, Space_Grotesk } from "next/font/google";
 import { Flip, ToastContainer } from "react-toastify";
 import "./globals.css";
 
@@ -14,12 +14,6 @@ const mainFont = Space_Grotesk({
 const headFont = Lora({
   variable: "--font-head",
   subsets: ["latin"],
-});
-
-const handFont = Patrick_Hand({
-  variable: "--font-hand",
-  subsets: ["latin"],
-  weight: "400",
 });
 
 export const metadata: Metadata = {
@@ -35,14 +29,18 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${mainFont.variable} ${headFont.variable} ${handFont.variable} relative h-svh overflow-hidden antialiased`}
+        className={`${mainFont.variable} ${headFont.variable} relative h-svh overflow-hidden antialiased`}
       >
-        <Navbar />
-        <div className="grid h-full grid-cols-12">
-          <div className="col-span-2">
+        <div className="flex h-full">
+          <div className="">
             <Sidebar />
           </div>
-          <div className="col-span-10 h-full overflow-y-auto">{children}</div>
+          <div className="relative h-full flex-1">
+            <Navbar />
+            <div className="mt-[50px] h-full w-full overflow-y-auto">
+              {children}
+            </div>
+          </div>
         </div>
         <LoginPortal />
         <ToastContainer
