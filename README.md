@@ -25,9 +25,9 @@ Check out the live demo at [www.adrift.com](https://adrift-dev.vercl.app)
 
 ## 📸 Screenshots
 
-![Screenshot 1](/.github/screenshot1.png)
-![Screenshot 2](/.github/screenshot1.png)
-![Screenshot 3](/.github/screenshot1.png)
+![Screenshot 1](/.github/assets/screenshot1.png)
+![Screenshot 2](/.github/assets/screenshot2.png)
+![Screenshot 3](/.github/assets/screenshot3.png)
 
 ## 🚀 Getting Started
 
